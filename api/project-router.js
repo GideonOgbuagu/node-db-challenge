@@ -1,4 +1,5 @@
 const express = require('express');
+// const db = require("../db-config.js")
 
 const Project = require('./project-model.js');
 
@@ -156,6 +157,25 @@ router.delete('/:id', (req, res) => {
   .catch(err => {
     res.status(500).json({ message: 'Failed to delete project' });
   });
+
+
+router.delete('/', (req, res) => {
+    // const { id } = req.params;
+    db("project")
+    .select()
+    .del()
+  .then(() => {
+    res.status(204).end();
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to delete projects' });
+  });
+
 });
+ 
+});
+
+
+
 
 module.exports = router;

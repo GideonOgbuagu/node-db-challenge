@@ -4,16 +4,22 @@ module.exports = {
 
   development: {
     client: 'sqlite3',
-    useNullAsDefault: true, 
+    useNullAsDefault: true, // needed for sqlite
     connection: {
-      filename: './project.db3'
+      filename: './project.db3',
     },
     migrations: {
       directory: './migrations'
-    }
-  },
-
-
+    },
+    // add the following
+    pool: {
+      afterCreate: (conn, done) => {
+        // runs after a connection is made to the sqlite engine
+        conn.run('PRAGMA foreign_keys = ON', done); // turn on FK enforcement
+      },
+    },
+  }, 
+  
 
   production: {
     client: 'postgresql',
@@ -32,4 +38,3 @@ module.exports = {
   }
 
 };
-
