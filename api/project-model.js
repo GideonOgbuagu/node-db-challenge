@@ -1,4 +1,4 @@
-const db = require("../db-config.js")
+const db = require("../data/db-config.js")
 
 module.exports = {
     get,
@@ -17,6 +17,8 @@ module.exports = {
 function get() {
     // get a list of project
     return db("project")
+    // .join("task as t", "t.product_id", "p.id")
+    // .join("resource as r", "r.product_id", "p.id")
     .select()
 }
 // .join("resource as r", "r.product_id", "p.id")
@@ -30,8 +32,7 @@ function getById(id) {
 
     function findResource(id) {
         return db("resource as r")
-            .join("project as p", "p.id", "r.product_id")
-            .select()
+            .select("*")
             .where({ id })
     }
     function add(project){
@@ -61,11 +62,10 @@ function getById(id) {
     }
 
     function findTask(id) {
-        return db("task")
-        .insert(task, "id")
-        .then(([id]) => {
-          return getById(id);
-        });
+        return db("task as t")
+            .join("project as p", "p.id", "t.product_id")
+            .select("*")
+            .where({ id })
     }
 
 
