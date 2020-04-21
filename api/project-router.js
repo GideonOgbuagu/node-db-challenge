@@ -18,6 +18,16 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/resources', (req, res) => {
+  Project.findResource()
+         .then(resources => {
+           res.status(200).json(resources)
+         })
+         .catch(err => {
+           res.status(500).json(err)
+         })
+
+})
 // get project by id
 
 router.get('/:id', (req, res) => {
@@ -49,12 +59,23 @@ router.post('/', (req, res) => {
     });
   });
 
+
+router.post('/resources', (req, res) => {
+  const resource = req.body;
+  Project.addResource(resource)
+         .then(resource => {
+           res.status(201).json(resource)
+         })
+         .catch(err => {
+           res.status(500).json(err)
+         })
+})
 // get resources by id
 
 router.get('/:id/resources', (req, res) => {
   const { id } = req.params;
 
-  Project.findResource(id)
+  Project.findResourceByProjectId(id)
   .then(resource => {
     if (resource.length) {
       res.json(resource);
